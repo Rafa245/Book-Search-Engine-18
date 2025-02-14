@@ -1,0 +1,19 @@
+{
+  "name": "book-search-engine-18",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "concurrently \"cd server && bun run src/server.ts\" \"cd client && bun run dev\"",
+    "develop": "concurrently \"cd server && bun run watch\" \"cd client && bun run dev\"",
+    "install": "cd server && bun i && cd ../client && bun i",
+    "build": "cd client && bun run build",
+    "render-build":"bun install && bun run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
