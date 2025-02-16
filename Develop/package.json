@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "concurrently \"cd server && bun run src/server.ts\" \"cd client && bun run dev\"",
+    "start": "bun server/src/server.ts",
     "develop": "concurrently \"cd server && bun run watch\" \"cd client && bun run dev\"",
     "install": "cd server && bun i && cd ../client && bun i",
     "build": "cd client && bun run build",
