@@ -1,5 +1,5 @@
-import User from "../src/models/User"
-import { signToken } from '../src/services/auth'
+import User from "../models/User"
+import { signToken } from '../services/auth'
 
 
 

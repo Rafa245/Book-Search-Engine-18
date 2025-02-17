@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-
-import { createUser } from '../utils/API';
+import { useMutation } from '@apollo/client'; // Import useMutation from Apollo
+import { ADD_USER } from '../utils/mutations'; // Import the ADD_USER mutation
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const SignupForm = ({}: { handleModalClose: () => void }) => {
   // set initial form state
-  const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
+  const [userFormData, setUserFormData] = useState<User>({
+    username: '',
+    email: '',
+    password: '',
+    savedBooks: [],
+  });
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+
+  // Apollo mutation hook
+  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -31,17 +39,20 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const response = await createUser(userFormData);
+      const { data } = await addUser({
+        variables: { userInput: userFormData }, // Passing userFormData as a variable
+      });
 
-      if (!response.ok) {
+      const { token } = data.addUser; // Assuming `addUser` mutation returns a `token`
+
+      if (!token) {
         throw new Error('something went wrong!');
       }
 
-      const { token } = await response.json();
-      Auth.login(token);
+      Auth.login(token); // Log the user in with the returned token
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
+      setShowAlert(true); // Show alert if there's an error
     }
 
     setUserFormData({

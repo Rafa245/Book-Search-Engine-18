@@ -8,12 +8,19 @@
     "develop": "concurrently \"cd server && bun run watch\" \"cd client && bun run dev\"",
     "install": "cd server && bun i && cd ../client && bun i",
     "build": "cd client && bun run build",
-    "render-build":"bun install && bun run build"
+    "render-build": "bun install && bun run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.13.1",
+    "apollo-server-express": "^3.13.0",
+    "express": "^4.21.2",
+    "graphql": "^16.10.0"
   }
 }
