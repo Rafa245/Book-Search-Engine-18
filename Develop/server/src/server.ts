@@ -19,11 +19,8 @@ const server = new ApolloServer({
 });
 const startApolloServer = async () => {
   try {
-    console.log(":hourglass_flowing_sand: Connecting to the database...");
     await db;
-    console.log(":white_check_mark: Database connected!");
     await server.start();
-    console.log(":white_check_mark: Apollo Server started!");
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
     app.use(
@@ -35,9 +32,7 @@ const startApolloServer = async () => {
         },
       })
     );
-    console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === "production") {
-      console.log(":open_file_folder: Serving client in production mode");
       app.use(express.static(path.join(__dirname, "../../client/dist")));
       console.log(path.join(__dirname, "../../client/dist"));
       app.get("*", (_req, res) => {
@@ -45,8 +40,8 @@ const startApolloServer = async () => {
       });
     }
     app.listen(PORT, () => {
-      console.log(`:rocket: API server running on port ${PORT}!`);
-      console.log(`:satellite_antenna: GraphQL available at http://localhost:${PORT}/graphql`);
+      console.log(` API server running on port ${PORT}!`);
+      console.log(`GraphQL available at http://localhost:${PORT}/graphql`);
     });
   } catch (error) {
     console.error(":x: Error starting server:", error);
