@@ -1,47 +1,32 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { Request } from 'express';
-
 dotenv.config();
-
 interface JwtPayload {
   _id: unknown;
   username: string;
-  email: string;
+  email: string,
 }
-
-// Function to verify and decode JWT
-export const authenticateToken = (authHeader?: string): JwtPayload | null => {
-  if (!authHeader) {
-    throw new Error('Authorization header missing');
+export const authenticateToken = (token: string) => {
+  if (!token) {
+    return null;
   }
-
-  const token = authHeader.split(' ')[1];
-  const secretKey = process.env.JWT_SECRET_KEY || '';
-
   try {
-    return jwt.verify(token, secretKey) as JwtPayload;
-  } catch (err) {
-    throw new Error('Unauthorized: Invalid token');
+    const secretKey = process.env.JWT_SECRET_KEY || '';
+    const cleanedToken = token.replace(/^Bearer\s/, '');
+    const decoded = jwt.verify(cleanedToken, secretKey) as JwtPayload;
+    return decoded;
+  } catch (error) {
+    console.error('Invalid token', error);
+    return null;
   }
 };
-
-// Function to sign a new JWT token
-export const signToken = (username: string, email: string, _id: unknown): string => {
+export const signToken = (username: string, email: string, _id: unknown) => {
   const payload = { username, email, _id };
   const secretKey = process.env.JWT_SECRET_KEY || '';
-
-  return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+  return jwt.sign(payload, secretKey, { expiresIn: '2h' });
 };
-
-// Auth middleware for Apollo Server context
-export const authMiddleware = ({ req }: { req: Request }) => {
-  const authHeader = req.headers.authorization || "";
-  
-  try {
-    const user = authenticateToken(authHeader);
-    return { user };
-  } catch {
-    return { user: null }; // Allow requests without authentication
-  }
+export const contextMiddleware = async ({ req }: { req: { headers: { authorization?: string } } }) => {
+  const token = req.headers.authorization ?? '';
+  const user = authenticateToken(token);
+  return { user };
 };

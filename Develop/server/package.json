@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "watch": "nodemon dist/server.js",
+    "start": "bun src/server.ts",
+    "watch": "bun --watch src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,7 +18,9 @@
     "brcypt": "^1.0.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^8.0.0"
+    "mongoose": "^8.0.0",
+    "@apollo/server": "^4.11.3",
+    "apollo-server-express": "^3.13.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

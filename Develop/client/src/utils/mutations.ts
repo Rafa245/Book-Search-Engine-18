@@ -1,65 +1,88 @@
-import { gql } from "@apollo/client"
+import { gql } from '@apollo/client';
 
+//LOGIN_USER Mutation
 export const LOGIN_USER = gql`
-    mutation Login($email: String!, $password: String!) {
-      login(email: $email, password: $password) {
-        token
-        user {
-          _id
-          email
-          username
+    mutation login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            token
+            user {
+                _id
+                username
+                email
+                bookCount
+                savedBooks {
+                    bookId
+                    authors
+                    description
+                    title
+                    image
+                    link
+                }
+            }
         }
-      }
     }
-`
+`;
 
+//ADD_USER Mutation
 export const ADD_USER = gql`
-    mutation AddUser($username: String!, $password: String!, $email: String!) {
-      addUser(username: $username, password: $password, email: $email) {
-        token
-        user {
-          _id
-          email
-          username
+    mutation addUser($username: String!, $email: String!, $password: String!) {
+        addUser(username: $username, email: $email, password: $password) {
+            token
+            user {
+                _id
+                username
+                email
+                bookCount
+                savedBooks {
+                    bookId
+                    authors
+                    description
+                    title
+                    image
+                    link
+                }
+            }
         }
-      }
     }
-`
+`;
 
+//SAVE_BOOK Mutation
 export const SAVE_BOOK = gql`
-    mutation SaveBook($book: BookInput) {
-      saveBook(book: $book) {
-        _id
-        email
-        bookCount
-        savedBooks {
-          authors
-          bookId
-          description
-          image
-          link
-          title
+    mutation saveBook($authors: [String!]!, $description: String!, $title: String!, $bookId: String!, $image: String, $link: String) {
+        saveBook(authors: $authors, description: $description, title: $title, bookId: $bookId, image: $image, link: $link) {  # <-- Fixed the typo here
+            _id
+            username
+            email
+            bookCount
+            savedBooks {
+                bookId
+                authors
+                description
+                title
+                image
+                link
+            }
         }
-        username
-      }
     }
-`
+`;
 
+
+//REMOVE_BOOK Mutation
 export const REMOVE_BOOK = gql`
-    mutation DeleteBook($bookId: String!) {
-      deleteBook(bookId: $bookId) {
-        _id
-        bookCount
-        email
-        savedBooks {
-          authors
-          bookId
-          description
-          image
-          link
-          title
+    mutation removeBook($bookId: String!) {
+        removeBook(bookId: $bookId) {
+            _id
+            username
+            email
+            bookCount
+            savedBooks {
+                bookId
+                authors
+                description
+                title
+                image
+                link
+            }
         }
-        username
-      }
     }
-`
+`;
